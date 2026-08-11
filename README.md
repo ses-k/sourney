@@ -1,5 +1,7 @@
 # Sourney — Local Music Downloader & Player
 
+> **Everything exists to answer a question—and every answer should naturally lead to another question.**
+
 Desktop MVP that searches for songs, downloads audio with an integrated `yt-dlp` backend, indexes tracks in a local SQLite database, and plays them in-app.
 
 ```text
