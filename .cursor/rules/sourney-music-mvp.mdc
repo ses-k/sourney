@@ -1,0 +1,25 @@
+---
+description: Sourney local music downloader MVP — architecture and agent rules
+alwaysApply: true
+---
+
+# Sourney Music MVP
+
+Read and follow `AGENTS.md` for full instructions.
+
+## Non-negotiables
+
+- Preserve the loop: Search → Download (yt-dlp) → Library (SQLite) → Play
+- Keep `yt-dlp` isolated in `electron/services/YtDlpService.ts`
+- UI talks only through the preload IPC API — never spawn yt-dlp from the renderer
+- One download at a time; queue statuses: pending/downloading/completed/failed/cancelled
+- No accounts, cloud sync, social features, or payments in the MVP
+- Local user albums (create/rename/delete, add/remove library tracks) are in scope; managed in Library
+- Surface errors in the UI; do not crash on missing metadata, artwork, or directories
+- Do not build a release/executable unless the user explicitly asks
+
+## When changing code
+
+- Extend services/interfaces instead of leaking infrastructure into React components
+- Keep player state in the renderer so navigation does not stop playback
+- Update README if setup, yt-dlp, or storage paths change
