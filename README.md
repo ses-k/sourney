@@ -53,17 +53,33 @@ Use the Electron desktop window (not a browser tab).
 
 ## Build / package
 
-Only when you want a packaged app:
+Only when you want a packaged app.
+
+**Windows** (this machine):
 
 ```powershell
 npm run build
 ```
 
-Windows artifacts under `release/<version>/`:
+Artifacts under `release/<version>/`:
 
 - `Sourney-<version>-portable.exe`
 - `Sourney-<version>-win-x64.exe` (NSIS installer)
-- `win-unpacked/Sourney.exe`
+
+**macOS** must be built on a Mac (or via GitHub Actions). Do **not** commit installers into the repo.
+
+### Publish downloads (recommended)
+
+1. Push the source + tag a version, e.g. `v0.1.0`
+2. The **Release** workflow builds Windows + macOS and attaches installers to a [GitHub Release](https://github.com/ses-k/sourney/releases)
+3. Share that release URL — people download the `.exe` / `.dmg` from there
+
+```powershell
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Unsigned builds will show SmartScreen (Windows) / Gatekeeper (macOS) warnings until you add code signing.
 
 ## Where data is stored
 

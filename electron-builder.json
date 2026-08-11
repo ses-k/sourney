@@ -25,6 +25,26 @@
     ],
     "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
   },
+  "mac": {
+    "icon": "build/icon.png",
+    "category": "public.app-category.music",
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false
+  },
+  "dmg": {
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+  },
   "nsis": {
     "oneClick": false,
     "perMachine": false,
