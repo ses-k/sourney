@@ -17,6 +17,8 @@
   "main": "dist-electron/main/index.js",
   "scripts": {
     "dev": "vite",
+    "vendor:win": "node scripts/download-vendor.mjs",
+    "prebuild": "node scripts/download-vendor.mjs",
     "build": "vite build && electron-builder",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json"

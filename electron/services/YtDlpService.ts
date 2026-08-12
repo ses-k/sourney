@@ -4,6 +4,12 @@ import os from 'node:os'
 import path from 'node:path'
 import type { AudioFormat, AudioQuality, SearchResult } from '../../shared/types'
 import { optimizeArtwork } from './ArtworkOptimizer'
+import {
+  envWithBundledTools,
+  getBundledFfmpegPath,
+  getBundledToolsDir,
+  getBundledYtDlpPath,
+} from './bundledTools'
 import { sanitizeFilename, uniqueFilePath } from './paths'
 
 export interface YtDlpDownloadOptions {
@@ -39,6 +45,7 @@ export class YtDlpService {
     const localAppData = process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local')
     const candidates = [
       process.env.YTDLP_PATH,
+      getBundledYtDlpPath(),
       'yt-dlp',
       'yt-dlp.exe',
       path.join(localAppData, 'Microsoft', 'WindowsApps', 'yt-dlp.exe'),
@@ -68,7 +75,7 @@ export class YtDlpService {
     }
 
     throw new Error(
-      'yt-dlp was not found. Install it (https://github.com/yt-dlp/yt-dlp) and ensure it is on PATH, or set YTDLP_PATH.',
+      'yt-dlp was not found. Reinstall Sourney, or install yt-dlp and ensure it is on PATH (or set YTDLP_PATH).',
     )
   }
 
@@ -81,12 +88,19 @@ export class YtDlpService {
       ytDlp = false
     }
 
-    const ffmpeg = await this.canRun('ffmpeg', ['-version'])
+    const ffmpegBin = getBundledFfmpegPath() ?? 'ffmpeg'
+    const ffmpeg = await this.canRun(ffmpegBin, ['-version'])
 
     let message = 'Ready'
-    if (!ytDlp && !ffmpeg) message = 'yt-dlp and ffmpeg are missing.'
-    else if (!ytDlp) message = 'yt-dlp was not found.'
-    else if (!ffmpeg) message = 'ffmpeg was not found (needed for audio conversion and covers).'
+    if (ytDlp && ffmpeg && getBundledToolsDir()) {
+      message = 'Ready (bundled yt-dlp + ffmpeg)'
+    } else if (!ytDlp && !ffmpeg) {
+      message = 'yt-dlp and ffmpeg are missing.'
+    } else if (!ytDlp) {
+      message = 'yt-dlp was not found.'
+    } else if (!ffmpeg) {
+      message = 'ffmpeg was not found (needed for audio conversion and covers).'
+    }
 
     return { ytDlp, ffmpeg, message }
   }
@@ -252,6 +266,7 @@ export class YtDlpService {
 
     // Sidecar covers (compressed later) instead of embedding — avoids duplicating
     // large artwork inside every audio file (Spotify-style offline storage).
+    const ffmpegLocation = getBundledToolsDir() ?? getBundledFfmpegPath()
     const args = [
       options.url,
       '-x',
@@ -270,6 +285,7 @@ export class YtDlpService {
       '--no-playlist',
       '--newline',
       '--no-warnings',
+      ...(ffmpegLocation ? ['--ffmpeg-location', ffmpegLocation] : []),
       '-o',
       outputTemplate,
     ]
@@ -381,7 +397,7 @@ export class YtDlpService {
         child = spawn(command, args, {
           windowsHide: true,
           env: {
-            ...process.env,
+            ...envWithBundledTools(),
             // Stream yt-dlp JSON lines immediately when launched via python -m
             PYTHONUNBUFFERED: '1',
             PYTHONIOENCODING: 'utf-8',

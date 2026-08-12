@@ -14,31 +14,23 @@ Search → Select → Download → Save locally → Library → Play
 
 **[Download Latest (Windows)](https://github.com/ses-k/sourney/releases/latest/download/Sourney-Setup.exe)** · [All releases](https://github.com/ses-k/sourney/releases)
 
-Requires [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [ffmpeg](https://ffmpeg.org/) on your PATH (see below).
+The Windows installer **bundles yt-dlp and ffmpeg** — normal users do not need to install them separately.
 
 ## Requirements
 
+### End users (installer)
+
+- Windows 10/11 x64
+- That’s it for the shipped app (tools are included)
+
+### Developers (`npm run dev` / local builds)
+
 - **Node.js** 20+ (22 recommended)
 - **npm** 10+
-- **yt-dlp** on your PATH (or installable as a Python module)
-- **ffmpeg** on your PATH (required by yt-dlp for audio extraction / metadata embedding)
+- Bundled tools: run `npm run vendor:win` once (also runs automatically before `npm run build`)
+- Or install system [yt-dlp](https://github.com/yt-dlp/yt-dlp) + [ffmpeg](https://ffmpeg.org/) on PATH
 
-### Install yt-dlp (Windows examples)
-
-```powershell
-winget install yt-dlp.yt-dlp
-winget install Gyan.FFmpeg
-```
-
-Or via pip:
-
-```powershell
-python -m pip install -U yt-dlp
-```
-
-The app resolves `yt-dlp` from `PATH`, `YTDLP_PATH`, common install locations, or `python -m yt_dlp`.
-
-Optional:
+Optional override:
 
 ```powershell
 $env:YTDLP_PATH = "C:\path\to\yt-dlp.exe"

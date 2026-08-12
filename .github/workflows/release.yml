@@ -43,6 +43,11 @@ jobs:
           fi
           echo "Building Sourney v${VERSION}"
 
+      - name: Download bundled yt-dlp + ffmpeg
+        run: npm run vendor:win
+        env:
+          FORCE_VENDOR_DOWNLOAD: "1"
+
       - name: Build Windows installer
         run: npm run build -- --win nsis --x64
         env:

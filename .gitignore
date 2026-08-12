@@ -9,6 +9,10 @@
 /release
 /coverage
 
+# downloaded tool binaries (fetched by scripts/download-vendor.mjs)
+/vendor/win/*
+!/vendor/win/.gitkeep
+
 # misc
 .DS_Store
 *.pem

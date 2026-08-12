@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import type { Track } from '../../shared/types'
+import { envWithBundledTools, getBundledFfprobePath } from './bundledTools'
 
 export class MetadataService {
   normalizeTrackInput(input: {
@@ -48,7 +49,7 @@ export class MetadataService {
 function probeDurationSeconds(filePath: string): Promise<number | null> {
   return new Promise((resolve) => {
     const child = spawn(
-      'ffprobe',
+      getBundledFfprobePath() ?? 'ffprobe',
       [
         '-v',
         'error',
@@ -58,7 +59,7 @@ function probeDurationSeconds(filePath: string): Promise<number | null> {
         'default=noprint_wrappers=1:nokey=1',
         filePath,
       ],
-      { windowsHide: true, stdio: ['ignore', 'pipe', 'ignore'] },
+      { windowsHide: true, env: envWithBundledTools(), stdio: ['ignore', 'pipe', 'ignore'] },
     )
 
     let stdout = ''

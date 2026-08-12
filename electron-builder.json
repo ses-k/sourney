@@ -11,6 +11,16 @@
     "dist-electron",
     "dist"
   ],
+  "extraResources": [
+    {
+      "from": "vendor/win",
+      "to": "bin",
+      "filter": [
+        "**/*",
+        "!.gitkeep"
+      ]
+    }
+  ],
   "win": {
     "icon": "build/icon.png",
     "target": [

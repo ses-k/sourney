@@ -34,6 +34,7 @@ Rules:
 
 - UI must **never** call `yt-dlp` or touch the database directly.
 - All `yt-dlp` usage lives in `electron/services/YtDlpService.ts`.
+- Windows releases bundle `yt-dlp` + `ffmpeg`/`ffprobe` from `vendor/win` (downloaded by `npm run vendor:win`, packaged as `resources/bin`). Prefer bundled tools, then system PATH.
 - Downloads run in the main process (never block the renderer).
 - Player state lives in the renderer so playback continues across screen changes.
 - Prefer extending service interfaces over leaking infrastructure details upward.

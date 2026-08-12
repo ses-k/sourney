@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
+import { envWithBundledTools, getBundledFfmpegPath } from './bundledTools'
 
 const MAX_EDGE = 512
 const JPEG_QUALITY = 6
@@ -89,8 +90,9 @@ function cleanupSiblingThumbnails(sourcePath: string, keepPath: string): void {
 
 function runFfmpeg(args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn('ffmpeg', args, {
+    const child = spawn(getBundledFfmpegPath() ?? 'ffmpeg', args, {
       windowsHide: true,
+      env: envWithBundledTools(),
       stdio: ['ignore', 'ignore', 'pipe'],
     })
 
