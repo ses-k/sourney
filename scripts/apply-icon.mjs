@@ -64,9 +64,16 @@ fs.mkdirSync('public', { recursive: true })
 fs.writeFileSync(path.join('build', 'icon.png'), png)
 fs.copyFileSync(path.join('build', 'icon.png'), path.join('public', 'icon.png'))
 
-const ico = await pngToIco([path.join('build', 'icon.png')])
-fs.writeFileSync(path.join('build', 'icon.ico'), ico)
-fs.copyFileSync(path.join('build', 'icon.ico'), path.join('public', 'favicon.ico'))
+// Prefer multi-size ICO for Windows installer / EXE embedding.
+const { spawnSync } = await import('node:child_process')
+const built = spawnSync(process.execPath, [path.join('scripts', 'build-ico.mjs')], {
+  stdio: 'inherit',
+})
+if (built.status !== 0) {
+  const ico = await pngToIco([path.join('build', 'icon.png')])
+  fs.writeFileSync(path.join('build', 'icon.ico'), ico)
+  fs.copyFileSync(path.join('build', 'icon.ico'), path.join('public', 'favicon.ico'))
+}
 
 let transparent = 0
 for (let i = 3; i < data.length; i += channels) if (data[i] === 0) transparent++
@@ -74,13 +81,7 @@ console.log({
   width,
   height,
   pngBytes: png.length,
-  icoBytes: ico.length,
+  icoBytes: fs.statSync(path.join('build', 'icon.ico')).size,
   transparentPixels: transparent,
   cornerAlpha: data[3],
-  centerSample: {
-    r: data[((height / 2) | 0) * width * channels + ((width / 2) | 0) * channels],
-    g: data[((height / 2) | 0) * width * channels + ((width / 2) | 0) * channels + 1],
-    b: data[((height / 2) | 0) * width * channels + ((width / 2) | 0) * channels + 2],
-    a: data[((height / 2) | 0) * width * channels + ((width / 2) | 0) * channels + 3],
-  },
 })

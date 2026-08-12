@@ -22,7 +22,7 @@
     }
   ],
   "win": {
-    "icon": "build/icon.png",
+    "icon": "build/icon.ico",
     "target": [
       {
         "target": "portable",
@@ -61,7 +61,10 @@
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false,
     "shortcutName": "Sourney",
-    "artifactName": "Sourney-Setup.exe"
+    "artifactName": "Sourney-Setup.exe",
+    "installerIcon": "build/icon.ico",
+    "uninstallerIcon": "build/icon.ico",
+    "installerHeaderIcon": "build/icon.ico"
   },
   "portable": {
     "artifactName": "${productName}-${version}-portable.exe"

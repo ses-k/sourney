@@ -55,6 +55,10 @@ const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
 function resolveAppIcon(): string {
   const candidates = [
+    // Packaged: Vite copies public/ → dist/
+    path.join(RENDERER_DIST, 'icon.png'),
+    path.join(RENDERER_DIST, 'favicon.ico'),
+    // Dev / local build resources
     path.join(process.env.APP_ROOT!, 'build', 'icon.ico'),
     path.join(process.env.APP_ROOT!, 'build', 'icon.png'),
     path.join(process.env.VITE_PUBLIC!, 'icon.png'),
