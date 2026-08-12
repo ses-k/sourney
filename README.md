@@ -1,5 +1,7 @@
 # Sourney — Local Music Downloader & Player
 
+[![Download Latest](https://img.shields.io/github/v/release/ses-k/sourney?label=Download%20Latest&style=for-the-badge)](https://github.com/ses-k/sourney/releases/latest/download/Sourney-Setup.exe)
+
 > **Everything exists to answer a question—and every answer should naturally lead to another question.**
 
 Desktop MVP that searches for songs, downloads audio with an integrated `yt-dlp` backend, indexes tracks in a local SQLite database, and plays them in-app.
@@ -7,6 +9,12 @@ Desktop MVP that searches for songs, downloads audio with an integrated `yt-dlp`
 ```text
 Search → Select → Download → Save locally → Library → Play
 ```
+
+## Download
+
+**[Download Latest (Windows)](https://github.com/ses-k/sourney/releases/latest/download/Sourney-Setup.exe)** · [All releases](https://github.com/ses-k/sourney/releases)
+
+Requires [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [ffmpeg](https://ffmpeg.org/) on your PATH (see below).
 
 ## Requirements
 
@@ -53,33 +61,42 @@ Use the Electron desktop window (not a browser tab).
 
 ## Build / package
 
-Only when you want a packaged app.
-
-**Windows** (this machine):
+Local Windows build (optional):
 
 ```powershell
 npm run build
 ```
 
-Artifacts under `release/<version>/`:
+### Publish a release (recommended)
 
-- `Sourney-<version>-portable.exe`
-- `Sourney-<version>-win-x64.exe` (NSIS installer)
-
-Do **not** commit installers into the repo.
-
-### Publish downloads (recommended)
-
-1. Push the source + tag a version, e.g. `v0.1.0`
-2. The **Release** workflow builds the Windows NSIS `.exe` and attaches it to a [GitHub Release](https://github.com/ses-k/sourney/releases)
-3. Share that release URL — people download the installer from there
+```text
+git push
+   ↓
+git tag v0.1.0 && git push origin v0.1.0
+   ↓
+GitHub Actions builds Sourney-Setup.exe
+   ↓
+GitHub Release created
+   ↓
+README “Download Latest” serves that .exe
+```
 
 ```powershell
+# 1) Commit your changes and push
+git add .
+git commit -m "your message"
+git push origin main
+
+# 2) Tag and push the tag (this triggers the Release workflow)
 git tag v0.1.0
 git push origin v0.1.0
 ```
 
-Unsigned builds may show a Windows SmartScreen warning until you add code signing.
+After the workflow finishes, the stable download URL is always:
+
+`https://github.com/ses-k/sourney/releases/latest/download/Sourney-Setup.exe`
+
+Do **not** commit installers into the repo. Unsigned builds may show a Windows SmartScreen warning until you add code signing.
 
 ## Where data is stored
 

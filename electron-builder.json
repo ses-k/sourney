@@ -50,7 +50,8 @@
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false,
-    "shortcutName": "Sourney"
+    "shortcutName": "Sourney",
+    "artifactName": "Sourney-Setup.exe"
   },
   "portable": {
     "artifactName": "${productName}-${version}-portable.exe"
